@@ -1,9 +1,11 @@
 import { Navbar, Nav, NavDropdown } from 'react-bootstrap';
 
+import { APP_NAME } from '../config';
+
 const Header = () => {
     return (
         <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
-        <Navbar.Brand href="#home">SEO Blog</Navbar.Brand>
+        <Navbar.Brand href="#home">{APP_NAME}</Navbar.Brand>
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
         <Navbar.Collapse id="responsive-navbar-nav">
             <Nav className="mr-auto">
