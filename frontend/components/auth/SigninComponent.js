@@ -1,9 +1,9 @@
 import {useState} from 'react';
-import { signup } from '../../actions/auth';
+import { signin } from '../../actions/auth';
+import Router from 'next/router';
 
-const SignupComponent = () => {
+const SigninComponent = () => {
     const [values, setValues] = useState({
-        name: '',
         email: '',
         password: '',
         error: '',
@@ -12,28 +12,22 @@ const SignupComponent = () => {
         showForm: true
     });
 
-    const {name, email, password, error, loading, message, showForm} = values;
+    const { email, password, error, loading, message, showForm} = values;
 
     const handleSubmit = e => {
         e.preventDefault();
-        console.table({name, email, password, error, loading, message, showForm});
+        console.table({email, password, error, loading, message, showForm});
         setValues({...values, loading: true, error: false})
-        const user = {name, email, password};
+        const user = {email, password};
 
-        signup(user).then(data => {
+        signin(user).then(data => {
             if (data.error) {
                 setValues({ ...values, error: data.error, loading: false });
             } else {
-                setValues({ 
-                    ...values, 
-                    name: '', 
-                    email: '', 
-                    password: '', 
-                    error: '', 
-                    loading: false, 
-                    message: data.message, 
-                    showForm: false 
-                });
+                // save user token to cookie
+                // save user info to localStorage
+                // authenticate user
+                Router.push(`/`);
             }
         });
     }
@@ -48,12 +42,9 @@ const SignupComponent = () => {
     
     const showMessage = () => (message ? <div className="alert alert-info">{message}</div> : '');
 
-    const signupForm = () => {
+    const signinForm = () => {
         return (
             <form onSubmit={handleSubmit}>
-                <div className="form-group">
-                    <input value={name} onChange={handleChange('name')} type="text" className="form-control" placeholder="Type your name" />
-                </div>
                 <div className="form-group">
                     <input value={email} onChange={handleChange('email')} type="email" className="form-control" placeholder="Type your email" />
                 </div>
@@ -61,7 +52,7 @@ const SignupComponent = () => {
                     <input value={password} onChange={handleChange('password')} type="password" className="form-control" placeholder="Type your password" />
                 </div>
                 <div>
-                    <button className="btn btn-primary">Signup</button>
+                    <button className="btn btn-primary">Signin</button>
                 </div>
             </form>
         )
@@ -71,9 +62,9 @@ const SignupComponent = () => {
             {showError()}
             {showLoading()}
             {showMessage()}
-            {showForm && signupForm()}
+            {showForm && signinForm()}
         </>
     )
 }
 
-export default SignupComponent;
+export default SigninComponent;
