@@ -1,8 +1,13 @@
 import { Navbar, Nav, NavDropdown } from 'react-bootstrap';
 import Link from 'next/link';
+import NProgress from 'nprogress';
 import { APP_NAME } from '../config';
 import { signout, isAuth } from '../actions/auth';
 import { Router } from 'next/router';
+
+Router.onRouteChangeStart = url => NProgress.start();
+Router.onRouteChangeComplete = url => NProgress.done();
+Router.onRouteChangeError = url => NProgress.done();
 
 const Header = () => {
     return (
