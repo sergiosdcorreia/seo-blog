@@ -4,10 +4,10 @@ import { isAuth } from '../../actions/auth';
 
 const Admin = ({ children }) => {
     useEffect(() => {
-        if(isAuth()) {
+        if(!isAuth()) {
             Router.push(`/signin`);
         } else if (isAuth().role !== 1) {
-            Router.push(`/`);
+            Router.push(``);
         }
     }, []);
     return <>{children}</>;
