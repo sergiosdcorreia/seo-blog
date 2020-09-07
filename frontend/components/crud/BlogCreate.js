@@ -39,6 +39,7 @@ const CreateBlog = ({router}) => {
     })
 
     const { error, sizeError, success, formData, title, hidePublishButton } = values;
+    const token = getCookie('token');
 
     useEffect(() => {
         setValues({ ...values, formData: new FormData() });
@@ -66,7 +67,17 @@ const CreateBlog = ({router}) => {
 
     const publishBlog = e => {
         e.preventDefault();
-        console.log('ready to publishBlog');
+        // console.log('ready to publishBlog');
+        createBlog(formData, token).then(data => {
+            if(data.error) {
+                setValues({ ...values, error: data.error });
+            } else {
+                setValues({ ...values, title: '', error: '', success: `A new blog titled "${data.title}" is created.` });
+                setBody('');
+                setCategories([]);
+                setTags([]);
+            }
+        });
     };
 
     const handleChange = name => e => {
@@ -170,6 +181,19 @@ const CreateBlog = ({router}) => {
                     {JSON.stringify(tags)}
                 </div>
                 <div className="col-md-4">
+                    <div>
+                        <div className="form-group pb-2">
+                            <h5>Featured image</h5>
+                            <hr />
+
+                            <small className="text-muted">Max size: 1MB</small>
+                            <label className="btn btn-outline-info">
+                                Upload featured image
+                                <input onChange={handleChange('photo')} type="file" accept="image/*" hidden />
+                            </label>
+                        </div>
+
+                    </div>
                     <h5>Categories</h5>
                     <ul style={{maxHeight: '200px', overflowY: 'scroll'}}>
                         {showCategories()}
