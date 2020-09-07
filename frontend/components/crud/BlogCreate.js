@@ -10,7 +10,19 @@ const ReactQuill = dynamic(() => import('react-quill'), {ssr: false});
 import MyApp from '../../pages/_app';
 
 const CreateBlog = ({router}) => {
-    const [body, setBody] = useState({});
+    const blogFromLS = () => {
+        if(typeof window === 'undefined') {
+            return false;
+        }
+
+        if(localStorage.getItem('blog')) {
+            return JSON.parse(localStorage.getItem('blog'));
+        } else {
+            return false;
+        }
+    };
+
+    const [body, setBody] = useState(blogFromLS());
     const [values, setValues] = useState({
         error: '',
         sizeError: '',
@@ -22,17 +34,29 @@ const CreateBlog = ({router}) => {
 
     const { error, sizeError, success, formData, title, hidePublishButton } = values;
 
+    useEffect(() => {
+        setValues({ ...values, formData: new FormData() });
+    }, [router])
+
     const publishBlog = e => {
         e.preventDefault();
         console.log('ready to publishBlog');
     };
 
     const handleChange = name => e => {
-        console.log(e.target.value);
+        // console.log(e.target.value);
+        const value = name === 'photo' ? e.target.files[0] : event.target.value;
+        formData.set(name, value);
+        setValues({ ...values, [name]: value, formData, error: '' })
     };
 
     const handleBody = e => {
-        console.log(e);
+        // console.log(e);
+        setBody(e);
+        formData.set('body', e);
+        if(typeof window !== 'undefined') {
+            localStorage.setItem('blog', JSON.stringify(e));
+        }
     };
 
     const createBlogForm = () => {
@@ -44,7 +68,7 @@ const CreateBlog = ({router}) => {
                 </div>
 
                 <div className="form-group">
-                    <ReactQuill value={body} placeholder="Write something amazing..." onChange={handleBody} />
+                    <ReactQuill modules={CreateBlog.modules} formats={CreateBlog.formats} value={body} placeholder="Write something amazing..." onChange={handleBody} />
                 </div>
 
                 <div>
@@ -61,5 +85,34 @@ const CreateBlog = ({router}) => {
         </div>
     );
 };
+
+CreateBlog.modules = {
+    toolbar: [
+        [{ header: '1' }, { header: '2' }, { header: [3, 4, 5, 6] }, { font: [] }],
+        [{ size: [] }],
+        ['bold', 'italic', 'underline', 'strike', 'blockquote'],
+        [{ list: 'ordered' }, { list: 'bullet' }],
+        ['link', 'image', 'video'],
+        ['clean'],
+        ['code-block']
+    ]
+};
+ 
+CreateBlog.formats = [
+    'header',
+    'font',
+    'size',
+    'bold',
+    'italic',
+    'underline',
+    'strike',
+    'blockquote',
+    'list',
+    'bullet',
+    'link',
+    'image',
+    'video',
+    'code-block'
+];
 
 export default withRouter(CreateBlog);
