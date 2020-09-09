@@ -20,7 +20,13 @@ const Header = () => {
 
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
         <Navbar.Collapse id="responsive-navbar-nav">
-            <Nav className="mr-auto">
+            <Nav className="ml-auto">
+                <>
+                    <Link href="/blogs">
+                        <a>Blogs</a>
+                    </Link>        
+                </>
+
                 {!isAuth && (
                     <>
                         <Link href="/signin">
