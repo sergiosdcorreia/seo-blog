@@ -135,7 +135,8 @@ exports.listAllBlogsCategoriesTags = (req, res) => {
                 error: errorHandler(err)
             });
         }
-        blogs = dataCategory.find({}).exec((err, c) => {
+        blogs = data;
+        Category.find({}).exec((err, c) => {
             if(err) {
                 return res.json({
                     error: errorHandler(err)
