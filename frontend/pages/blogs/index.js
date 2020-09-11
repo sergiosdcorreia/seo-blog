@@ -14,7 +14,7 @@ const Blogs = ({ blogs, categories, tags, totalBlogs, blogsLimit, blogsSkip, rou
     const[limit, setLimit] = useState(blogsLimit);
     const[skip, setSkip] = useState(0);
     const[size, setSize] = useState(totalBlogs);
-    const[loadedBlogs, setLoadedBlogs] = useState(blogsLimit);
+    const[loadedBlogs, setLoadedBlogs] = useState([]);
 
     const loadMore = () => {
         let toSkip = skip + limit;
@@ -30,13 +30,13 @@ const Blogs = ({ blogs, categories, tags, totalBlogs, blogsLimit, blogsSkip, rou
     }
 
     const loadMorebutton = () => {
-        return {
+        return (
             size > 0 && size >= limit && (
                 <button onClick={loadMore} className="btn btn-outline-primary btn-lg">
                     Load more
                 </button>
             )
-        }
+        )
     }
 
     const head = () => {
