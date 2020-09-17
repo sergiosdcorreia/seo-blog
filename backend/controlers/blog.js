@@ -10,13 +10,13 @@ const fs = require('fs');
 const { smartTrim } = require('../helpers/blog');
 
 exports.create = (req, res) => {
-    let form = new formidable.IncomingForm()
-    form.keepExtensions = true
+    let form = new formidable.IncomingForm();
+    form.keepExtensions = true;
     form.parse(req, (err, fields, files) => {
         if(err) {
             return res.status(400).json({
                 error: 'Image could not upload'
-            })
+            });
         }
 
         const { title, body, categories, tags } = fields;
@@ -51,7 +51,7 @@ exports.create = (req, res) => {
         blog.excerpt = smartTrim(body, 320, ' ', ' ...');
         blog.slug = slugify(title).toLowerCase();
         blog.mtitle = `${title} | ${process.env.APP_NAME}`;
-        blog.mdesc = stripHtml(body.substring(0, 160));
+        blog.mdesc = stripHtml[body.substring(0, 160)];
         blog.postedBy = req.user._id;
 
         // categories and tags
