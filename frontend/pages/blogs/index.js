@@ -5,8 +5,6 @@ import Layout from '../../components/Layout';
 import { useState } from 'react';
 import { listBlogsWithCategoriesAndTags } from '../../actions/blog';
 import { API, DOMAIN, APP_NAME, FB_APP_ID } from '../../config';
-import renderHTML from 'react-render-html';
-import moment from 'moment';
 import Card from '../../components/blog/Card';
 
 const Blogs = ({ blogs, categories, tags, totalBlogs, blogsLimit, blogsSkip, router }) => {
@@ -127,11 +125,11 @@ const Blogs = ({ blogs, categories, tags, totalBlogs, blogsLimit, blogsSkip, rou
     );
 };
 
-Blogs.getInitialProps = () => {
+Blogs.getServerSideProps = () => {
     let skip = 0;
     let limit = 2;
     return listBlogsWithCategoriesAndTags(skip, limit).then(data => {
-        if(data.error) {
+        if (data.error) {
             console.log(data.error)
         } else {
             return ({
